@@ -18,13 +18,31 @@
 			"fonts/mui.ttf"
 		],
 		"refer": [
-			"html/main.html"
+			"html/main.html",
+			"html/reg.html",
+			"html/forget_password.html"
 		]
 	},
 	"html/main.html": {
 		"resources": [
 			"js/mui.min.js",
 			"css/mui.min.css"
+		]
+	},
+	"html/reg.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/style.css"
+		]
+	},
+	"html/forget_password.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css"
 		]
 	}
 }

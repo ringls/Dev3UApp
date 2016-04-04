@@ -64,48 +64,78 @@
 				</div>				
 			</form>
 			<div class="mui-content-padded">
-				<button id="sendcode" class="mui-btn mui-btn-block mui-btn-success" >发送短信校验</button>
+				<button id="sendCode" class="mui-btn mui-btn-block mui-btn-success" >发送短信校验</button>
 				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
-				
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
 		<script>
 			(function($, doc) {
 				$.init();
 				$.plusReady(function() {
-					var settings = app.getSettings();
+					var sendCodeButton = doc.getElementById('sendCode');
 					var regButton = doc.getElementById('reg');
 					var accountBox = doc.getElementById('account');
 					var passwordBox = doc.getElementById('password');
 					var passwordConfirmBox = doc.getElementById('password_confirm');
-					var emailBox = doc.getElementById('email');
+					var codeBox = doc.getElementById('code');
+					sendCodeButton.addEventListener('tap',function(event){
+						plus.nativeUI.toast('短信平台未搭建，默认输入123456');						
+					});
 					regButton.addEventListener('tap', function(event) {
 						var regInfo = {
-							account: accountBox.value,
-							password: passwordBox.value,
-							email: emailBox.value
+							UserId: accountBox.value,
+							PhoneNumber:accountBox.value,
+							PassWord: passwordBox.value,
+							Code: codeBox.value
 						};
-						var passwordConfirm = passwordConfirmBox.value;
-						if (passwordConfirm != regInfo.password) {
-							plus.nativeUI.toast('密码两次输入不一致');
-							return;
+						if(regInfo.UserId==""){
+							plus.nativeUI.toast('手机号码不能为空');
 						}
-						app.reg(regInfo, function(err) {
-							if (err) {
-								plus.nativeUI.toast(err);
-								return;
-							}
-							plus.nativeUI.toast('注册成功');
-							$.openWindow({
-								url: 'login.html',
-								id: 'login',
-								show: {
-									aniShow: 'pop-in'
+						else if(regInfo.Code==""){
+							plus.nativeUI.toast('验证短信不能为空');
+						}
+						else if(regInfo.PassWord==""){
+							plus.nativeUI.toast('登录密码不能为空');
+						}
+						else if(regInfo.PassWord.length<6){
+							plus.nativeUI.toast('密码最短为 6 个字符');
+						}
+						else if (passwordConfirmBox.value != regInfo.PassWord) {
+							plus.nativeUI.toast('密码两次输入不一致');
+						}
+						else{
+							plus.nativeUI.showWaiting();
+							mui.ajax({
+								type: "POST",
+								url: localStorage.getItem('serverIp')+"SysService/RegeditUser",
+								dataType: "JSON",
+								data: JSON.stringify(regInfo),
+								success: function (result) {									
+									plus.nativeUI.closeWaiting();
+									var msg = JSON.parse(result);
+									if(msg.R){
+										plus.nativeUI.toast('注册成功');
+										$.openWindow({
+											id: 'main',
+											show: {
+												aniShow: 'pop-in'
+											},
+											waiting: {
+												autoShow: false
+											}
+										});
+									}
+									else {
+										plus.nativeUI.toast(msg.I);
+									}
+								},
+								error: function (XMLHttpRequest, textStatus, errorThrown) {
+									plus.nativeUI.closeWaiting();
+									plus.nativeUI.toast('服务器连接异常,请稍后重试.');
 								}
 							});
-						});
+						}
 					});
 				});
 			}(mui, document));

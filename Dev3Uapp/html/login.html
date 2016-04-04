@@ -122,64 +122,81 @@
 				});
 				
 				localStorage.setItem('serverIp','http://192.168.0.149:9030/');
-				localStorage.setItem('dbName','DEV3U');
-				localStorage.setItem('appId','PUB');
+				localStorage.setItem('appId','PUB');				
 				
-				$.plusReady(function() {		
-					
-					var loginButton = doc.getElementById('login');
-					var accountBox = doc.getElementById('account');
-					var passwordBox = doc.getElementById('password');
-					var regButton = doc.getElementById('reg');
-					var forgetButton = doc.getElementById('forgetPassword');
-					loginButton.addEventListener('tap', function(event) {
-						var loginInfo = {
-							UserId: accountBox.value,
-							password: passwordBox.value,
-							AppId:localStorage.getItem('appId'),
-							DBName:localStorage.getItem('dbName'),
-							LimitTime:600
-						};
-						if (loginInfo.UserId.length < 5) {
-							plus.nativeUI.toast('账号最短为 5 个字符');
-						}
-						else if (loginInfo.password.length < 6) {
-							plus.nativeUI.toast('密码最短为 6 个字符');
-						}
-						//ajax执行
-						else{
-							plus.nativeUI.showWaiting();
-							
-							mui.ajax({
-								type: "POST",
-								url: localStorage.getItem('serverIp')+"SysService/UserLogin",
-								dataType: "JSON",
-								data: JSON.stringify(loginInfo),
-								success: function (result) {									
-									plus.nativeUI.closeWaiting();
-									var msg = JSON.parse(result);
-									if(msg.R){
-										$.openWindow({
-											id: 'main',
-											show: {
-												aniShow: 'pop-in'
-											},
-											waiting: {
-												autoShow: false
-											}
-										});
-									}
-									else {
-										mui.toast(msg.I);
-									}
+				$.plusReady(function() {	
+					var mainPage = $.preload({
+						"id": 'main',
+						"url": 'main.html'
+					});
+					var toMain = function() {
+						$.fire(mainPage, 'show', null);
+						setTimeout(function() {
+							$.openWindow({
+								id: 'main',
+								show: {
+									aniShow: 'pop-in'
 								},
-								error: function (XMLHttpRequest, textStatus, errorThrown) {
-									plus.nativeUI.closeWaiting();
-									mui.toast('服务器连接异常,请稍后重试.');
+								waiting: {
+									autoShow: false
 								}
 							});
-						}
-					});
+						}, 0);
+					};
+					//判断是否有用户信息
+					var strUser=plus.storage.getItem("$user");
+					
+					if(strUser){
+						var user = JSON.parse(strUser);
+						toMain();
+					}
+					
+						var loginButton = doc.getElementById('login');
+						var accountBox = doc.getElementById('account');
+						var passwordBox = doc.getElementById('password');
+						var regButton = doc.getElementById('reg');
+						var forgetButton = doc.getElementById('forgetPassword');
+						loginButton.addEventListener('tap', function(event) {
+							var loginInfo = {
+								UserId: accountBox.value,
+								PassWord: passwordBox.value,
+								AppId:localStorage.getItem('appId'),
+								LimitTime:600
+							};
+							if (loginInfo.UserId.length < 5) {
+								plus.nativeUI.toast('账号最短为 5 个字符');
+							}
+							else if (loginInfo.PassWord.length < 6) {
+								plus.nativeUI.toast('密码最短为 6 个字符');
+							}
+							//ajax执行
+							else{
+								plus.nativeUI.showWaiting();							
+								mui.ajax({
+									type: "POST",
+									url: localStorage.getItem('serverIp')+"SysService/UserLogin",
+									dataType: "JSON",
+									data: JSON.stringify(loginInfo),
+									success: function (result) {									
+										plus.nativeUI.closeWaiting();
+										var msg = JSON.parse(result);
+										if(msg.R){
+											//存储用户信息
+											plus.storage.setItem("$user",JSON.stringify(msg.D));
+											toMain();
+										}
+										else {
+											plus.nativeUI.toast(msg.I);
+										}
+									},
+									error: function (XMLHttpRequest, textStatus, errorThrown) {
+										plus.nativeUI.closeWaiting();
+										plus.nativeUI.toast('服务器连接异常,请稍后重试.');
+									}
+								});
+							}
+						});
+					
 					$.enterfocus('#login-form input', function() {
 						$.trigger(loginButton, 'tap');
 					});					
