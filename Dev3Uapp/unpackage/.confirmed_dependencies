@@ -1,48 +1,48 @@
 {
-	"index.html": {
-		"href": "index.html",
-		"resources": [
-			"js/mui.min.js",
-			"css/mui.min.css"
-		],
-		"refer": [],
-		"priority": 0
-	},
-	"html/login.html": {
-		"resources": [
-			"css/mui.css",
-			"js/mui.min.js",
-			"css/style.css",
-			"js/mui.js",
-			"js/mui.enterfocus.js",
-			"fonts/mui.ttf"
-		],
-		"refer": [
-			"html/main.html",
-			"html/reg.html",
-			"html/forget_password.html"
-		]
-	},
-	"html/main.html": {
-		"resources": [
-			"js/mui.min.js",
-			"css/mui.min.css"
-		]
-	},
-	"html/reg.html": {
-		"resources": [
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"css/style.css"
-		]
-	},
-	"html/forget_password.html": {
-		"resources": [
-			"fonts/mui.ttf",
-			"js/mui.min.js",
-			"css/mui.min.css",
-			"css/style.css"
-		]
-	}
+  "index.html": {
+    "href": "index.html",
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": [],
+    "priority": 0
+  },
+  "html/login.html": {
+    "resources": [
+      "css/mui.css",
+      "js/mui.min.js",
+      "css/style.css",
+      "js/mui.js",
+      "js/mui.enterfocus.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "html/main.html",
+      "html/reg.html",
+      "html/forget_password.html"
+    ]
+  },
+  "html/main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ]
+  },
+  "html/reg.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/style.css"
+    ]
+  },
+  "html/forget_password.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "css/style.css"
+    ]
+  }
 }

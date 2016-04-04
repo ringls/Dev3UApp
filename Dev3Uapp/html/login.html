@@ -130,8 +130,7 @@
 						"url": 'main.html'
 					});
 					var toMain = function() {
-						$.fire(mainPage, 'show', null);
-						setTimeout(function() {
+						
 							$.openWindow({
 								id: 'main',
 								show: {
@@ -141,16 +140,15 @@
 									autoShow: false
 								}
 							});
-						}, 0);
+						
 					};
 					//判断是否有用户信息
 					var strUser=plus.storage.getItem("$user");
 					
 					if(strUser){
 						var user = JSON.parse(strUser);
-						toMain();
+						toMain();						
 					}
-					
 						var loginButton = doc.getElementById('login');
 						var accountBox = doc.getElementById('account');
 						var passwordBox = doc.getElementById('password');
